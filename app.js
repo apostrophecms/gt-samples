@@ -1,5 +1,5 @@
 require('apostrophe')({
-  shortName: 'a3-boilerplate',
+  shortName: 'gt-samples',
   modules: {
     // Apostrophe module configuration
     // *******************************

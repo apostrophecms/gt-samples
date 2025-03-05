@@ -1,4 +1,5 @@
 module.exports = {
+  extend: '@apostrophecms/piece-type',
   fields: {
     add: {
       content: {
@@ -47,6 +48,15 @@ module.exports = {
       	    // Activate your own widget types here
       	  }
       	}
+      }
+    },
+    group: {
+      basics: {
+        label: 'Basics',
+        fields: [
+          'title',
+          'content'
+        ]
       }
     }
   }

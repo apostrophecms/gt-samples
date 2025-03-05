@@ -4,6 +4,10 @@ This project is intended as sample code to demonstrate certain features. You **c
 
 This project is based on the [starter-kit-essentials](https://github.com/apostrophecms/starter-kit-essentials) project, which is a good starting point if you don't want any extra code pre-built in the application. Whereas if you want a richer starting point, consider any of our other starter kits.
 
+## Note on ESM versus commonjs
+
+This code is in commonjs format (with `require` and `module.exports`) to accommodate ease of use in a client project that was built with that syntax. commonjs and ESM cannot be mixed and matched in a single project. So if you are incorporating these samples into a newer ESM-based project, just modify to use `import` and `export default { ... }` as needed.
+
 ## Running the project directly
 
 To experiment with this project, `git clone` this repository and install its dependencies using `npm install`. Add an initial admin user with `node app @apostrophecms/user:add admin admin`.
