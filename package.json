@@ -1,5 +1,5 @@
 {
-  "name": "starter-kit-essentials",
+  "name": "gt-samples",
   "version": "1.0.0",
   "description": "ApostropheCMS Essential Starter Kit Site",
   "main": "app.js",
@@ -35,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/apostrophecms/starter-kit-essentials"
+    "url": "https://github.com/apostrophecms/gt-samples"
   },
   "author": "Apostrophe Technologies, Inc.",
   "license": "MIT",

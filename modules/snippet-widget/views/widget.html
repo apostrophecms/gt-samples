@@ -1,0 +1,5 @@
+{# in sites/snippet-widget/views/widget.html #}
+
+{% for snippet in data.widget._snippets %}
+  {% area snippet, 'content' %}
+{% endfor %}

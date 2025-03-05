@@ -19,7 +19,9 @@ module.exports = {
                 'link',
                 '|',
                 'bulletList',
-                'orderedList'
+                'orderedList',
+                'table',
+                'image'
               ],
               styles: [
                 {
@@ -40,8 +42,12 @@ module.exports = {
                 'image'
               ]
             },
-            '@apostrophecms/image': {},
-            '@apostrophecms/video': {}
+            '@apostrophecms/image': {
+              // Don't let them pick an image that will pixelate
+              minSize: [ 1024, 1024 ]
+            },
+            '@apostrophecms/video': {},
+            'snippet': {}
           }
         }
       }
