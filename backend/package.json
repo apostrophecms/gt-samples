@@ -4,10 +4,10 @@
   "description": "ApostropheCMS Essential Starter Kit Site",
   "main": "app.js",
   "scripts": {
-    "start": "node app",
-    "dev": "nodemon",
+    "start": "PORT=3001 node app",
+    "dev": "PORT=3001 nodemon",
     "build": "NODE_ENV=production node app @apostrophecms/asset:build",
-    "serve": "NODE_ENV=production node app",
+    "serve": "PORT=3001 NODE_ENV=production node app",
     "release": "npm install && npm run build && node app @apostrophecms/migration:migrate"
   },
   "nodemonConfig": {

@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
 
 function App() {
+
+  const [ body, setBody ] = useState(null);
+
+  useEffect(() => {
+    fetchPage();
+    async function fetchPage() {
+      // You may also want the query string, just a basic example
+      const url = `/cms${window.location.pathname}`;
+      console.log('-->', url);
+      const response = await fetch(url);
+      setBody(await response.text());
+    }
+  }, []);
+
+  // Bare bones example, error handling is a good idea
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { body
+        ?
+        <div dangerouslySetInnerHTML={{__html: body}} />
+        :
+        <p>Loading...</p>
+      }
     </div>
   );
 }
