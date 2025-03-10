@@ -30,7 +30,8 @@ require('apostrophe')({
     asset: {},
     // The project's first custom page type.
     'default-page': {},
-    'snippet': {},
-    'snippet-widget': {}
+    snippet: {},
+    'snippet-widget': {},
+    'columns-widget': {}
   }
 });
