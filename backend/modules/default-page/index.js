@@ -47,7 +47,8 @@ module.exports = {
               minSize: [ 1024, 1024 ]
             },
             '@apostrophecms/video': {},
-            'snippet': {}
+            'snippet': {},
+            '@apostrophecms/form': {}            
           }
         }
       }

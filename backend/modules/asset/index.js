@@ -1,12 +1,4 @@
 module.exports = {
-  middleware(self) {
-    return {
-      logPaths(req, res, next) {
-        console.log(req.url);
-        return next();
-      }
-    };
-  },
   routes(self) {
     return {
       get: {
@@ -51,7 +43,7 @@ module.exports = {
           throw self.apos.error('notfound');
         }
         req.res.set('content-type', contentType);
-        return req.res.send(result.text());
+        return req.res.send(await result.text());
       }
     }
   }

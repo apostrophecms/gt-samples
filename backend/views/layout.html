@@ -11,10 +11,14 @@
 
 {% block beforeMain %}
 <div class="bp-wrapper">
-  <header class="bp-header">
-    <nav class="bp-nav"></nav>
-    {% if not data.user %}
-      <a class="bp-button bp-header__login" href="/login">Login</a>
+  <header class="bp-header" data-page-title="{{ title }}">
+    {% if data.page._children.length > 0 %}
+      <h4>Subpages:</h4>
+      <ul>
+      {% for child in data.page._children %}
+        <li><a href="{{ child._url }}">{{ child.title }}</a></li>
+      {% endfor %}
+      </ul>
     {% endif %}
   </header>
   <main class="bp-main">
