@@ -10,7 +10,14 @@ const cmsProxies = {};
 app.set('trust proxy', 1);
 
 // Pages
-proxy('/cms');
+proxy('/cms', true);
+
+// Media
+proxy('/uploads', false);
+
+// ApostropheCMS APIs
+
+proxy('/api/v1', false);
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -46,7 +53,7 @@ function findCms(req) {
   return 'http://localhost:3001';
 }
 
-function proxy(path) {
+function proxy(path, removePath) {
   app.use(
     path,
     (req, res, next) => {
@@ -61,7 +68,7 @@ function proxy(path) {
         target: baseUrl,
         changeOrigin: true,
         secure: false,
-        pathRewrite: { [`^/${path}`]: '' },
+        pathRewrite: removePath ? { [`^${path}`]: '' } : {}
       });
       return cmsProxies[key](req, res, next);
     }
@@ -76,6 +83,7 @@ async function deliver(req, url, contentType) {
     res.status(200);
     return res.send(content);
   } catch (e) {
+    console.error(e);
     res.status(e.status || 500);
     return res.send('error');
   }

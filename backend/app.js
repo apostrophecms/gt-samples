@@ -1,6 +1,5 @@
 require('apostrophe')({
   shortName: 'gt-samples',
-  prefix: '/cms',
   modules: {
     // Apostrophe module configuration
     // *******************************

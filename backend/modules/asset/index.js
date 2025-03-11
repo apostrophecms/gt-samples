@@ -1,5 +1,13 @@
 module.exports = {
-  apiRoutes(self) {
+  middleware(self) {
+    return {
+      logPaths(req, res, next) {
+        console.log(req.url);
+        return next();
+      }
+    };
+  },
+  routes(self) {
     return {
       get: {
         // /api/v1/asset/public-bundle-css returns the styles
@@ -16,28 +24,34 @@ module.exports = {
   methods(self) {
     return {
       async fetchBundle(req, extension, bundleName, contentType) {
-        let content = 'scripts\nstylesheets';
-        content = self.apos.template.insertBundlesMarkup({
-          scene: 'public',
-          content,
-          scriptsPlaceholder: 'scripts',
-          stylesheetsPlaceholder: 'stylesheets',
-          widgetsBundles: {}
-        });
-        const [ , url ] = content.match(new RegExp(`"(.*?${bundleName}.${extension})"`));
-        if (url) {
-          req.res.set('content-type', contentType);
-          return self.retrieve(req, url, 'text/html');
-        } else {
-          throw self.apos.error('notfound');
+        try {
+          let content = 'scripts\nstylesheets';
+          content = self.apos.template.insertBundlesMarkup({
+            scene: 'public',
+            content,
+            scriptsPlaceholder: 'scripts',
+            stylesheetsPlaceholder: 'stylesheets',
+            widgetsBundles: {}
+          });
+          const [ , url ] = content.match(new RegExp(`"(.*?${bundleName}.${extension})"`));
+          if (url) {
+            req.res.set('content-type', contentType);
+            await self.retrieve(req, url, contentType);
+          } else {
+            throw self.apos.error('notfound');
+          }
+        } catch (e) {
+          console.error('error:', e);
+          return req.res.status(e.status || 500).send('error');
         }
       },
-      async retrieve(req, url) {
+      async retrieve(req, url, contentType) {
         const result = await fetch(new URL(url, req.baseUrl));
         if (result.status >= 400) {
           throw self.apos.error('notfound');
         }
-        return result.text();
+        req.res.set('content-type', contentType);
+        return req.res.send(result.text());
       }
     }
   }
