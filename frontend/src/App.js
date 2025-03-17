@@ -21,8 +21,10 @@ function App() {
       // Run ApostropheCMS widget players
       window.apos.util.runPlayers();
       // Update the title tag after the new content is in the DOM
-      const title = document.querySelector('[data-page-title]').getAttribute('data-page-title');
-      document.querySelector('title').innerText = title;
+      const title = document.querySelector('[data-page-title]')?.getAttribute('data-page-title');
+      if (title != null) {
+        document.querySelector('title').innerText = title;
+      }
     }
   });
 
