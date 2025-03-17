@@ -2,6 +2,7 @@ module.exports = {
   fields: {
     add: {
       className: {
+        label: 'Presentation Style',
         type: 'select',
         choices: [
           {
@@ -13,7 +14,7 @@ module.exports = {
             label: 'Full Width'
           }
         ],
-        def: 'full'
+        def: 'image-widget-full'
       }
     }
   }
