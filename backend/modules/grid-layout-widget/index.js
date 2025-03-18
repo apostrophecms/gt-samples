@@ -81,10 +81,6 @@ module.exports = {
             {
               label: 'Product Showcase',
               value: 'productShowcase'
-            },
-            {
-              label: 'Custom Grid',
-              value: 'custom'
             }
           ]
         },
@@ -120,11 +116,6 @@ module.exports = {
           },
           fields: {
             add: {
-              minHeight: {
-                type: 'string',
-                label: 'Minimum Height',
-                help: 'E.g., 200px, 50vh'
-              },
               verticalAlign: {
                 type: 'select',
                 label: 'Vertical Alignment',
@@ -146,37 +137,6 @@ module.exports = {
                   { label: 'Stretch', value: 'stretch' }
                 ],
                 def: 'stretch'
-              },
-              gapOverride: {
-                type: 'string',
-                label: 'Custom Gap',
-                help: 'Override default gap spacing'
-              }
-            }
-          }
-        },
-        responsiveSettings: {
-          type: 'object',
-          label: 'Responsive Settings',
-          fields: {
-            add: {
-              spacing: {
-                type: 'object',
-                label: 'Responsive Spacing',
-                fields: {
-                  add: {
-                    tabletGap: {
-                      type: 'string',
-                      label: 'Grid Gap (Tablet) e.g., "10px" or "1rem"',
-                      def: '0.75rem'
-                    },
-                    mobileGap: {
-                      type: 'string',
-                      label: 'Grid Gap (Mobile) e.g., "10px" or "1rem"',
-                      def: '0.5rem'
-                    }
-                  }
-                }
               }
             }
           }
@@ -490,102 +450,6 @@ module.exports = {
           options: baseAreaConfig,
           if: {
             layoutType: 'productShowcase'
-          }
-        },
-        customGrid: {
-          type: 'object',
-          label: 'Custom Grid Settings',
-          if: {
-            layoutType: 'custom'
-          },
-          fields: {
-            add: {
-              rows: {
-                type: 'integer',
-                label: 'Number of Rows',
-                def: 2
-              },
-              columns: {
-                type: 'integer',
-                label: 'Number of Columns',
-                def: 2
-              },
-              gap: {
-                type: 'string',
-                label: 'Grid Gap',
-                help: 'Set the spacing between grid items, e.g., "10px" or "1rem".',
-                def: '10px'
-              },
-              padding: {
-                type: 'string',
-                label: 'Grid Padding',
-                help: 'Set the padding for the grid container, e.g., "20px" or "2rem".',
-                def: '0px'
-              },
-              margin: {
-                type: 'string',
-                label: 'Grid Margin',
-                help: 'Set the margin for the grid container, e.g., "20px" or "2rem".',
-                def: '0px'
-              },
-              contentAreas: {
-                type: 'array',
-                label: 'Content Areas',
-                titleField: 'name',
-                fields: {
-                  add: {
-                    name: {
-                      type: 'string',
-                      label: 'Grid Area Name'
-                    },
-                    rowStart: {
-                      type: 'integer',
-                      label: 'Row Start'
-                    },
-                    rowSpan: {
-                      type: 'integer',
-                      label: 'Row Span',
-                      def: 1
-                    },
-                    colStart: {
-                      type: 'integer',
-                      label: 'Column Start'
-                    },
-                    colSpan: {
-                      type: 'integer',
-                      label: 'Column Span',
-                      def: 1
-                    },
-                    tabletColSpan: {
-                      type: 'integer',
-                      label: 'Column Span (Tablet)',
-                      help: 'Number of columns this area should span on tablet devices',
-                      def: null
-                    },
-                    minHeight: {
-                      type: 'string',
-                      label: 'Minimum Height'
-                    },
-                    verticalAlign: {
-                      type: 'select',
-                      label: 'Vertical Alignment',
-                      choices: [
-                        { label: 'Top', value: 'start' },
-                        { label: 'Center', value: 'center' },
-                        { label: 'Bottom', value: 'end' },
-                        { label: 'Stretch', value: 'stretch' }
-                      ],
-                      def: 'start'
-                    },
-                    content: {
-                      type: 'area',
-                      label: 'Content',
-                      options: baseAreaConfig
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         addOverride: {

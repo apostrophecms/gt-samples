@@ -42,18 +42,6 @@ module.exports = widget => {
     return defaultConfig;
   }
 
-  // For custom layouts, merge with custom settings
-  if (widget.layoutType === 'custom') {
-    return {
-      ...defaultConfig,
-      rows: widget.customGrid.rows,
-      columns: widget.customGrid.columns,
-      gap: widget.customGrid.gap,
-      padding: widget.customGrid.padding,
-      margin: widget.customGrid.margin
-    };
-  }
-
   // For preset layouts, merge with preset config
   return {
     ...defaultConfig,

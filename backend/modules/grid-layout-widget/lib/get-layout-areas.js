@@ -464,12 +464,5 @@ module.exports = widget => {
         },
       ];
 
-    case 'custom':
-    default:
-      return widget.customGrid.contentAreas.map((area) => ({
-        ...area,
-        tabletColSpan: area.tabletColSpan || area.colSpan,
-        mobileColSpan: 12,
-      }));
   }
 };
