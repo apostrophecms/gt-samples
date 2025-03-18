@@ -1,7 +1,12 @@
-const widgets = require('../../lib/content-area-widgets.js');
+// Don't allow snippets in snippets
+const { snippet, ...widgets } = require('../../lib/content-area-widgets.js');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
+	options: {
+		label: 'Snippet',
+		pluralLabel: 'Snippets'
+	},
   fields: {
     add: {
       content: {
