@@ -9,7 +9,7 @@ const getLayoutClasses = require('./lib/get-layout-classes.js');
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'Grid Layout Widget',
+    label: 'Grid Layout',
     width: 'one-half',
     icon: 'view-grid',
     description: 'Create responsive CSS Grid-based layouts for your content.',
@@ -450,19 +450,6 @@ module.exports = {
           options: baseAreaConfig,
           if: {
             layoutType: 'productShowcase'
-          }
-        },
-        addOverride: {
-          type: 'boolean',
-          label: 'Add CSS target override?',
-          help: 'Check this box to add an additional class for custom CSS targeting.',
-        },
-        overrideClass: {
-          type: 'string',
-          label: 'Override Class',
-          help: 'Add a custom class for CSS targeting.',
-          if: {
-            addOverride: true
           }
         }
       }
