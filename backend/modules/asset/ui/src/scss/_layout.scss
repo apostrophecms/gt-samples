@@ -19,7 +19,6 @@ body {
 }
 
 .bp-header,
-main,
 .bp-footer {
   width: 100%;
   max-width: 800px;
@@ -64,10 +63,4 @@ main,
   &:visited {
     color: white;
   }
-}
-
-.bp-content {
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
 }
