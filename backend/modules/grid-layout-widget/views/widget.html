@@ -1,0 +1,41 @@
+{% set widget = data.widget %}
+{% set areas = apos.gridLayoutWidget.getLayoutAreas(widget) %}
+{% set config = apos.gridLayoutWidget.getLayoutConfig(widget) %}
+
+{% set layoutClasses = apos.gridLayoutWidget.getLayoutClasses(widget) %}
+
+<div class="container is-fluid mb-6">
+  <div
+    id="custom-layout-widget-{{ widget._id }}"
+    class="{{ layoutClasses }}"
+    data-widget-id="{{ widget._id }}"
+    data-layout-type="{{ widget.layoutType }}"
+    aria-label="{{ widget.layoutType}} layout section"
+    style="
+      --columns: {{ config.columns }};
+      --rows: {{ config.rows }};
+      --gap: {{ config.gap }};
+      --padding: {{ config.padding }};
+      --margin: {{ config.margin }};    
+    "
+  >
+    {% for area in areas %}
+      <div
+        class="custom-layout-area area-{{ area.name }} layout-{{ widget.layoutType }}-{{ area.name }}"
+        data-area-name="{{ area.name }}"
+        style="        
+          --col-start: {{ area.colStart }};
+          --col-span: {{ area.colSpan }};
+          --row-start: {{ area.rowStart }};
+          --row-span: {{ area.rowSpan }};
+          --tablet-col-span: {{ area.tabletColSpan }};
+          --mobile-col-span: {{ area.mobileColSpan }};
+          --align-self: {{ widget.areaStyles?.verticalAlign or 'stretch' }};
+          --justify-self: {{ widget.areaStyles?.horizontalAlign or 'stretch' }};
+        "
+      >
+        {% area widget, area.areaName %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
