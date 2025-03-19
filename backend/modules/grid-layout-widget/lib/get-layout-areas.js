@@ -1,10 +1,10 @@
-module.exports = widget => {
+module.exports = (widget) => {
   switch (widget.layoutType) {
-    case 'asideMainThree':
+    case 'asideMain':
       return [
         {
           name: 'aside',
-          areaName: 'asideContent',
+          areaName: 'primaryAsideContent',
           colStart: 1,
           colSpan: 4,
           rowStart: 1,
@@ -24,7 +24,7 @@ module.exports = widget => {
         },
       ];
 
-    case 'mainAsideThree':
+    case 'mainAside':
       return [
         {
           name: 'main',
@@ -38,7 +38,7 @@ module.exports = widget => {
         },
         {
           name: 'aside',
-          areaName: 'asideContent',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 1,
@@ -52,32 +52,32 @@ module.exports = widget => {
       return [
         {
           name: 'aside',
-          areaName: 'asideLongContent',
+          areaName: 'primaryAsideContent',
           colStart: 1,
           colSpan: 4,
           rowStart: 1,
           rowSpan: 4,
-          tabletColSpan: 12,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
         {
           name: 'main-top',
-          areaName: 'mainTopContent',
+          areaName: 'mainContent',
           colStart: 5,
           colSpan: 8,
           rowStart: 1,
           rowSpan: 2,
-          tabletColSpan: 12,
+          tabletColSpan: 8,
           mobileColSpan: 12,
         },
         {
           name: 'main-bottom',
-          areaName: 'mainBottomContent',
+          areaName: 'secondaryAsideContent',
           colStart: 5,
           colSpan: 8,
           rowStart: 3,
           rowSpan: 2,
-          tabletColSpan: 12,
+          tabletColSpan: 8,
           mobileColSpan: 12,
         },
       ];
@@ -86,32 +86,32 @@ module.exports = widget => {
       return [
         {
           name: 'main-top',
-          areaName: 'mainTopContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 1,
           rowSpan: 2,
-          tabletColSpan: 12,
+          tabletColSpan: 8,
           mobileColSpan: 12,
         },
         {
           name: 'main-bottom',
-          areaName: 'mainBottomContent',
+          areaName: 'secondaryAsideContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 3,
           rowSpan: 2,
-          tabletColSpan: 12,
+          tabletColSpan: 8,
           mobileColSpan: 12,
         },
         {
           name: 'aside',
-          areaName: 'asideLongContent',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 1,
           rowSpan: 4,
-          tabletColSpan: 12,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
       ];
@@ -130,7 +130,7 @@ module.exports = widget => {
         },
         {
           name: 'left',
-          areaName: 'leftColumnContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 6,
           rowStart: 2,
@@ -140,7 +140,7 @@ module.exports = widget => {
         },
         {
           name: 'right',
-          areaName: 'rightColumnContent',
+          areaName: 'primaryAsideContent',
           colStart: 7,
           colSpan: 6,
           rowStart: 2,
@@ -164,7 +164,7 @@ module.exports = widget => {
       return [
         {
           name: 'featured',
-          areaName: 'featuredContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 12,
           rowStart: 1,
@@ -174,22 +174,22 @@ module.exports = widget => {
         },
         {
           name: 'col1',
-          areaName: 'columnOneContent',
+          areaName: 'primaryAsideContent',
           colStart: 1,
           colSpan: 4,
           rowStart: 2,
           rowSpan: 1,
-          tabletColSpan: 6,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
         {
           name: 'col2',
-          areaName: 'columnTwoContent',
+          areaName: 'secondaryAsideContent',
           colStart: 5,
           colSpan: 4,
           rowStart: 2,
           rowSpan: 1,
-          tabletColSpan: 6,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
         {
@@ -199,7 +199,7 @@ module.exports = widget => {
           colSpan: 4,
           rowStart: 2,
           rowSpan: 1,
-          tabletColSpan: 12,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
       ];
@@ -207,8 +207,8 @@ module.exports = widget => {
     case 'magazineLayout':
       return [
         {
-          name: 'headline',
-          areaName: 'headlineContent',
+          name: 'feature',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 1,
@@ -217,52 +217,32 @@ module.exports = widget => {
           mobileColSpan: 12,
         },
         {
-          name: 'sidebar',
-          areaName: 'sidebarContent',
+          name: 'topSidebar',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 1,
-          rowSpan: 3,
-          tabletColSpan: 4,
-          mobileColSpan: 12,
-        },
-        {
-          name: 'feature1',
-          areaName: 'feature1Content',
-          colStart: 1,
-          colSpan: 4,
-          rowStart: 3,
           rowSpan: 1,
           tabletColSpan: 4,
           mobileColSpan: 12,
         },
         {
-          name: 'feature2',
-          areaName: 'feature2Content',
-          colStart: 5,
-          colSpan: 4,
-          rowStart: 3,
-          rowSpan: 1,
-          tabletColSpan: 4,
-          mobileColSpan: 12,
-        },
-        {
-          name: 'feature3',
-          areaName: 'feature3Content',
+          name: 'bottomSidebar',
+          areaName: 'secondaryAsideContent',
           colStart: 9,
           colSpan: 4,
-          rowStart: 3,
+          rowStart: 2,
           rowSpan: 1,
           tabletColSpan: 4,
           mobileColSpan: 12,
-        },
+        }
       ];
 
     case 'contentHub':
       return [
         {
-          name: 'hero',
-          areaName: 'heroContent',
+          name: 'headline',
+          areaName: 'headlineContent',
           colStart: 1,
           colSpan: 12,
           rowStart: 1,
@@ -272,7 +252,7 @@ module.exports = widget => {
         },
         {
           name: 'featured',
-          areaName: 'featuredHubContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 2,
@@ -282,7 +262,7 @@ module.exports = widget => {
         },
         {
           name: 'quickLinks',
-          areaName: 'quickLinksContent',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 2,
@@ -309,24 +289,14 @@ module.exports = widget => {
           rowSpan: 1,
           tabletColSpan: 6,
           mobileColSpan: 12,
-        },
-        {
-          name: 'fullWidth',
-          areaName: 'fullWidthContent',
-          colStart: 1,
-          colSpan: 12,
-          rowStart: 5,
-          rowSpan: 1,
-          tabletColSpan: 12,
-          mobileColSpan: 12,
-        },
+        }
       ];
 
     case 'galleryMasonry':
       return [
         {
           name: 'featured',
-          areaName: 'galleryFeaturedContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 1,
@@ -336,23 +306,23 @@ module.exports = widget => {
         },
         {
           name: 'side1',
-          areaName: 'gallerySide1Content',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 1,
           rowSpan: 1,
           tabletColSpan: 4,
-          mobileColSpan: 6,
+          mobileColSpan: 12,
         },
         {
           name: 'side2',
-          areaName: 'gallerySide2Content',
+          areaName: 'secondaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 2,
           rowSpan: 1,
           tabletColSpan: 4,
-          mobileColSpan: 6,
+          mobileColSpan: 12,
         },
         {
           name: 'bottom',
@@ -370,17 +340,17 @@ module.exports = widget => {
       return [
         {
           name: 'mainMetric',
-          areaName: 'mainMetricContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 8,
           rowStart: 1,
-          rowSpan: 1,
+          rowSpan: 3,
           tabletColSpan: 8,
           mobileColSpan: 12,
         },
         {
           name: 'sideMetrics',
-          areaName: 'sideMetricsContent',
+          areaName: 'primaryAsideContent',
           colStart: 9,
           colSpan: 4,
           rowStart: 1,
@@ -390,22 +360,22 @@ module.exports = widget => {
         },
         {
           name: 'chart',
-          areaName: 'chartContent',
-          colStart: 1,
-          colSpan: 6,
+          areaName: 'secondaryAsideContent',
+          colStart: 9,
+          colSpan: 4,
           rowStart: 2,
           rowSpan: 1,
-          tabletColSpan: 12,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
         {
           name: 'table',
-          areaName: 'tableContent',
-          colStart: 7,
-          colSpan: 6,
-          rowStart: 2,
+          areaName: 'tertiaryAsideContent',
+          colStart: 9,
+          colSpan: 4,
+          rowStart: 3,
           rowSpan: 1,
-          tabletColSpan: 12,
+          tabletColSpan: 4,
           mobileColSpan: 12,
         },
       ];
@@ -414,7 +384,7 @@ module.exports = widget => {
       return [
         {
           name: 'mainProduct',
-          areaName: 'mainProductContent',
+          areaName: 'mainContent',
           colStart: 1,
           colSpan: 6,
           rowStart: 1,
@@ -424,7 +394,7 @@ module.exports = widget => {
         },
         {
           name: 'details',
-          areaName: 'productDetailsContent',
+          areaName: 'primaryAsideContent',
           colStart: 7,
           colSpan: 6,
           rowStart: 1,
@@ -463,6 +433,5 @@ module.exports = widget => {
           mobileColSpan: 12,
         },
       ];
-
   }
 };

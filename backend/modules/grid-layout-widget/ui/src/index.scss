@@ -42,7 +42,6 @@
 
   .custom-layout-area {
     grid-column: span var(--tablet-col-span);
-    grid-row: auto;
   }
 }
 
@@ -56,7 +55,6 @@
 
   .custom-layout-area {
     grid-column: span var(--mobile-col-span);
-    grid-row: auto;
   }
 }
 
