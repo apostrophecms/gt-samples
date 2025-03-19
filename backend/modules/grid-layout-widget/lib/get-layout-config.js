@@ -11,16 +11,16 @@ const GRID_DEFAULTS = {
 
 // Basic preset configurations for different layout types
 const presetConfigs = {
-  asideMainThree: { rows: 3 },
-  mainAsideThree: { rows: 3 },
-  asideTwoMain: { rows: 4 },
-  twoMainAside: { rows: 4 },
+  asideMain: { rows: 2 },
+  mainAside: { rows: 2 },
+  asideTwoMain: { rows: 2 },
+  twoMainAside: { rows: 2 },
   headerTwoColFooter: { rows: 3 },
   featuredThreeGrid: { rows: 2 },
-  magazineLayout: { rows: 3, gap: '1.5rem' },
-  contentHub: { rows: 5, gap: '2rem' },
+  magazineLayout: { rows: 2, gap: '1.5rem' },
+  contentHub: { rows: 3, gap: '2rem' },
   galleryMasonry: { rows: 3 },
-  dashboardLayout: { rows: 2, gap: '1.5rem' },
+  dashboardLayout: { rows: 3, gap: '1.5rem' },
   productShowcase: { rows: 3, gap: '2rem' }
 };
 

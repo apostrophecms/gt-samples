@@ -41,7 +41,7 @@
   }
 
   .custom-layout-area {
-    grid-column: span var(--tablet-col-span);
+    grid-column: auto / span var(--tablet-col-span);
     grid-row: auto;
   }
 }
@@ -50,12 +50,12 @@
 
 @media (max-width: 480px) {
   .custom-layout-widget {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(12, 1fr);
     gap: calc(var(--gap) * 0.5);
   }
 
   .custom-layout-area {
-    grid-column: span var(--mobile-col-span);
+    grid-column: auto / span var(--mobile-col-span);
     grid-row: auto;
   }
 }
