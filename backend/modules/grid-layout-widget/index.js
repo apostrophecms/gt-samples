@@ -14,7 +14,8 @@ module.exports = {
     icon: 'view-grid',
     description: 'Create responsive CSS Grid-based layouts for your content.',
     previewImage: 'svg',
-    alias: 'gridLayoutWidget'
+    alias: 'gridLayoutWidget',
+    box: false
   },
   icons: {
     'view-grid': 'ViewGrid'
@@ -37,7 +38,12 @@ module.exports = {
           label: 'Layout Type',
           htmlHelp: previewHtml,
           required: true,
+          def: 'fullWidthMain',
           choices: [
+            {
+              label: 'Full Width',
+              value: 'fullWidthMain'
+            },
             {
               label: 'Aside + Main Content',
               value: 'asideMain'

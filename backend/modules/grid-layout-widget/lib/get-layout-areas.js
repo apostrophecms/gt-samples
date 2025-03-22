@@ -1,5 +1,18 @@
 module.exports = (widget) => {
   switch (widget.layoutType) {
+    case 'fullWidthMain':
+      return [
+        {
+          name: 'main',
+          areaName: 'mainContent',
+          colStart: 1,
+          colSpan: 12,
+          rowStart: 1,
+          rowSpan: 1,
+          tabletColSpan: 12,
+          mobileColSpan: 12,
+        },
+      ];
     case 'asideMain':
       return [
         {

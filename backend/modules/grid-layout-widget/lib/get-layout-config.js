@@ -11,6 +11,7 @@ const GRID_DEFAULTS = {
 
 // Basic preset configurations for different layout types
 const presetConfigs = {
+  fullWidth: { rows: 2 },
   asideMain: { rows: 2 },
   mainAside: { rows: 2 },
   asideTwoMain: { rows: 2 },
