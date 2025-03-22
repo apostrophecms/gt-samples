@@ -3,12 +3,25 @@
   margin: 16px;
 }
 
+.image-widget-percent {
+  display: block;
+  margin: 16px auto;
+}
+
+.image-widget-pixels {
+  display: block;
+  margin: 16px auto;
+  max-width: 100%;
+}
+
 .image-widget-one-half {
   display: block;
   margin: 16px auto;
   width: 50%;
 }
 
-// .image-widget-full {
-  // The defaults work well here
-// }
+.image-widget-full {
+  display: block;
+  margin: 16px auto;
+  width: 100%;
+}
