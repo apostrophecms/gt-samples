@@ -1,4 +1,4 @@
-.custom-layout-widget {
+.grid-layout-widget {
   display: grid;
   grid-template-columns: repeat(var(--columns), 1fr);
   grid-template-rows: repeat(var(--rows), auto);
@@ -8,7 +8,7 @@
   height: auto;
 }
 
-.custom-layout-area {
+.grid-layout-area {
   grid-column: var(--col-start) / span var(--col-span);
   grid-row: var(--row-start) / span var(--row-span);
   min-height: var(--min-height, auto);
@@ -16,77 +16,32 @@
   justify-self: var(--justify-self, stretch);
 }
 
-.max-width-768 {
-  max-width: 768px;
-}
+// TODO how do I bring this back in an automatic way?
+//
+// // Tablet-ish
 
-.max-width-960 {
-  max-width: 960px;
-}
+// @media (max-width: 1023px) {
+//   .custom-layout-widget {
+//     grid-template-columns: repeat(12, 1fr);
+//     gap: calc(var(--gap) * 0.75);
+//   }
 
-.max-width-1152 {
-  max-width: 1152px;
-}
+//   .custom-layout-area {
+//     grid-column: auto / span var(--tablet-col-span);
+//     grid-row: auto;
+//   }
+// }
 
-.max-width-1344 {
-  max-width: 1344px;
-}
+// // Smartphone-ish
 
-// Tablet-ish
+// @media (max-width: 480px) {
+//   .custom-layout-widget {
+//     grid-template-columns: repeat(12, 1fr);
+//     gap: calc(var(--gap) * 0.5);
+//   }
 
-@media (max-width: 1023px) {
-  .custom-layout-widget {
-    grid-template-columns: repeat(12, 1fr);
-    gap: calc(var(--gap) * 0.75);
-  }
-
-  .custom-layout-area {
-    grid-column: auto / span var(--tablet-col-span);
-    grid-row: auto;
-  }
-}
-
-// Smartphone-ish
-
-@media (max-width: 480px) {
-  .custom-layout-widget {
-    grid-template-columns: repeat(12, 1fr);
-    gap: calc(var(--gap) * 0.5);
-  }
-
-  .custom-layout-area {
-    grid-column: auto / span var(--mobile-col-span);
-    grid-row: auto;
-  }
-}
-
-/* Layout Preview Styles - Used in widget editor UI */
-.layout-preview-container {
-  margin: 0.5rem 0;
-}
-
-.layout-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.2rem;
-}
-
-.layout-card {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 0.75rem;
-  background: white;
-}
-
-.layout-title {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.preview-svg {
-  width: 100%;
-  height: auto;
-  background: white;
-}
+//   .custom-layout-area {
+//     grid-column: auto / span var(--mobile-col-span);
+//     grid-row: auto;
+//   }
+// }
