@@ -12,7 +12,12 @@ module.exports = {
     description: 'Create responsive CSS Grid-based layouts for your content.',
     previewImage: 'svg',
     alias: 'gridLayoutWidget',
-    box: false
+    box: false,
+    contextual: true,
+    components: {
+      widgetEditor: 'GridLayoutEditor'
+    },
+    stops: 12
   },
   icons: {
     'view-grid': 'ViewGrid'
@@ -53,5 +58,16 @@ module.exports = {
         }
       }
     };
+  },
+  extendMethods(self) {
+    return {
+      getBrowserData(_super, req) {
+        const data = _super(req);
+        return {
+          ...data,
+          stops: self.options.stops
+        };
+      }
+    }
   }
 };
