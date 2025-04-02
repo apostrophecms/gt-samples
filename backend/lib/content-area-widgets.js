@@ -15,7 +15,9 @@ module.exports = {
       'link',
       '|',
       'bulletList',
-      'orderedList'
+      'orderedList',
+      '|',
+      'table'
     ],
     styles: [
       {
@@ -33,9 +35,10 @@ module.exports = {
     ],
     insert: [
       'table',
-      'image'
+      'importTable'
     ]
   },
+  'rich-text-with-figure': {},
   '@apostrophecms/image': {},
   '@apostrophecms/video': {},
   'snippet': {},

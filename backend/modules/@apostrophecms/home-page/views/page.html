@@ -6,12 +6,8 @@
 {% extends "layout.html" %}
 
 {% block main %}
-  <section class="bp-welcome">
-    <h1 class="bp-welcome__headline">
-      CMS page: {{ data.page.title }}
-    </h1>
-    <div class="bp-welcome__area">
-      {% area data.page, 'main' %}
-    </div>
+  <section class="bp-content">
+    <h1>{{ data.page.title }}</h1>
+    {% area data.page, 'main' %}
   </section>
 {% endblock %}
