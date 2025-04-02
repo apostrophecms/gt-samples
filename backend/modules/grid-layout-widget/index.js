@@ -17,6 +17,7 @@ module.exports = {
     components: {
       widgetEditor: 'GridLayoutEditor'
     },
+    // Default # of stops
     stops: 12
   },
   icons: {
