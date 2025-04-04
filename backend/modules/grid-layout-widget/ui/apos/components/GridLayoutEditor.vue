@@ -73,12 +73,21 @@ function allowRemove() {
 // at the end, otherwise before column i
 function addBefore(i) {
   const old = columns.value;
-  const next = [];
+  console.log(JSON.stringify(old));
+  let next;
   const freeLeft = old[0].colStart;
   const endRight = last(old).colStart + last(old).colSpan;
   const freeRight = stopsTotal - endRight;
-  const borrowFromLeft = old.lastIndexOf(col => col.colSpan > 1, i);
-  const borrowFromRight = old.indexOf(col => col.colSpan > 1, i);
+  const borrowFromLeft = findLastIndex(old, col => col.colSpan > 1, i - 1);
+  const borrowFromRight = findIndex(old, col => col.colSpan > 1, i);
+
+  console.log({
+    i,
+    freeLeft,
+    freeRight,
+    borrowFromLeft,
+    borrowFromRight
+  });
 
   if ((i === 0) && (freeLeft > 0)) {
     // Take the empty space at far left
@@ -92,7 +101,7 @@ function addBefore(i) {
     // TODO a map that replaces one, then insert the new one
     next = [ ...old.map(col => (col._id === from._id) ? {
       ...from,
-      colSpan: colSpan - 1
+      colSpan: from.colSpan - 1
     } : col) ];
     // Don't forget to subtract the stop we borrowed from left
     next.splice(i, 0, newColumn(old[i].colStart + old[i].colSpan - 1, 1));
@@ -102,14 +111,16 @@ function addBefore(i) {
     // TODO a map that replaces one, then insert the new one
     next = [ ...old.map(col => (col._id === from._id) ? {
       ...from,
-      colSpan: colSpan - 1
+      colStart: from.colStart + 1,
+      colSpan: from.colSpan - 1
     } : col) ];
     // We borrowed from the right so we don't need to subtract one
-    next.splice(i, 0, newColumn(old[i].colStart + old[i].colSpan, 1));
+    next.splice(i, 0, newColumn(old[i].colStart, 1));
   } else {
     throw new Error('addBefore should not be reachable if no stops are free or borrowable');
   }
   columns.value = next;
+  console.log('new columns:', JSON.stringify(next));
 }
 function addAfter(i) {
   return addBefore(i + 1);
@@ -131,21 +142,22 @@ function last(a) {
 // to do some automatic reshuffling, or maybe it wouldn't
 
 function columnChange(i, colStart, colSpan) {
-  if (columns.some((column, index) => {
+  if (columns.value.some((column, index) => {
     if (index === i) {
       return false;
     }
     const a1 = colStart;
     const a2 = colStart + colSpan;
     const b1 = column.colStart;
-    const b2 = column.colStart + colSpan;
-    return intersect(a1, a2, b1, b2);
+    const b2 = column.colStart + column.colSpan;
+    return intersects(a1, a2, b1, b2);
   })) {
     // So that x and width reset in the column
+    console.log('Bumping generation due to intersection');
     generation.value++;
     return;
   }
-  const updated = [...columns.filter((column, index) => index !== i), {
+  const updated = [...columns.value.filter((column, index) => index !== i), {
     ...columns[i],
     colStart,
     colSpan
@@ -154,10 +166,36 @@ function columnChange(i, colStart, colSpan) {
     return a.colStart - b.colStart;
   });
   columns.value = updated;
+  // In case the other parameters didn't change: we still want
+  // to reset any partial moves
+  generation.value++;
 }
 
 function intersects(a1, a2, b1, b2) {
-  if (a)
+  // This is lazy, but effective
+  console.log(a1, a2, b1, b2);
+  const places = [];
+  for (let i = 0; (i < stopsTotal); i++) {
+    places[i] = false;
+  }
+  for (let i = a1; (i < a2); i++) {
+    places[i] = true;
+  }
+  for (let i = b1; (i < b2); i++) {
+    if (places[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// Because fromIndex is missing from the standard methods for no reason
+function findIndex(a, fn, fromIndex) {
+  return a.findIndex((v, i) => (i >= fromIndex) && fn(v));
+}
+
+function findLastIndex(a, fn, fromIndex) {
+  return a.findLastIndex((v, i) => (i <= fromIndex) && fn(v));
 }
 </script>
 
@@ -165,6 +203,9 @@ function intersects(a1, a2, b1, b2) {
   .contextual-heading-controls {
     display: none;
     width: 100%;
+  }
+  .focused {
+    min-height: 50vh;
   }
   .focused .contextual-heading-controls {
     display: block;

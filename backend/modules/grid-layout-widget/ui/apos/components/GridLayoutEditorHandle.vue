@@ -18,10 +18,12 @@
   const el = ref(null);
 
   let dx;
+  let dragging = false;
   function down(event) {
     if (!event.isPrimary) {
       return;
     }
+    dragging = true;
     el.value.setPointerCapture(event.pointerId);
     dx = event.pageX;
   }
@@ -29,9 +31,14 @@
     if (!event.isPrimary) {
       return;
     }
+    if (!dragging) {
+      return;
+    }
     console.log('emitting change');
+    const delta = event.pageX - dx;
+    dx = event.pageX;
     emit('change', {
-      delta: event.pageX - dx,
+      delta,
       commit: false
     });
   }
@@ -40,8 +47,12 @@
       return;
     }
     el.value.releasePointerCapture(event.pointerId);
+    dragging = false;
+    const delta = event.pageX - dx;
+    dx = event.pageX;
+    console.log('committing');
     emit('change', {
-      delta: event.pageX - dx,
+      delta,
       commit: true
     });
   }

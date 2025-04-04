@@ -1,17 +1,17 @@
 <template>
   <div class="column" :style="`left: ${x}px; width: ${width}px`">
-    <button v-if="allowAddBefore" @click="addBefore" class="add-left">+</button>
+    <span v-if="allowAddBefore" @click="addBefore" class="add-left">+</span>
     <GridLayoutEditorHandle @change="expandLeft" className="grid-layout-editor-expand-left">
       &lt;
     </GridLayoutEditorHandle>
     <GridLayoutEditorHandle @change="move" className="grid-layout-editor-move">
       #
     </GridLayoutEditorHandle>
-    <button v-if="allowRemove" @click.prevent="remove()" class="remove">x</button>
+    <span v-if="allowRemove" @click.prevent="remove()" class="remove">x</span>
     <GridLayoutEditorHandle @change="expandRight" className="grid-layout-editor-expand-right">
       &gt;
     </GridLayoutEditorHandle>
-    <button v-if="allowAddAfter" @click="addAfter" class="add-right">+</button>
+    <span v-if="allowAddAfter" @click="addAfter" class="add-right">+</span>
   </div>
 </template>
 
@@ -61,6 +61,7 @@ function addAfter() {
 function expandLeft({ delta, commit }) {
   x.value += delta;
   width.value -= delta;
+  console.log('new values:', x.value, width.value);
   if (commit) {
     change();
   }
@@ -96,17 +97,23 @@ function snap(x, min, max) {
 <style scoped>
 .column {
   position: absolute;
+  height: 1.25em;
+  background-color: #def;
+  border-radius: 0.625em;
 }
 .add-left {
   position: absolute;
-  left: 0;
+  left: 0.25em;
+  cursor: pointer;
 }
 .add-right {
   position: absolute;
-  right: -1em;
+  right: 0.25em;
+  cursor: pointer;
 }
 .remove {
   position: absolute;
   right: calc(50% - 1em);
+  cursor: pointer;
 }
 </style>
