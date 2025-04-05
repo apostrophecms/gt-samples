@@ -69,11 +69,11 @@
 <style>
   .grid-layout-editor-expand-left {
     position: absolute;
-    left: 2em;
+    left: 0;
   }
   .grid-layout-editor-expand-right {
     position: absolute;
-    right: 3em;
+    right: 0;
   }
   .grid-layout-editor-move {
     position: absolute;

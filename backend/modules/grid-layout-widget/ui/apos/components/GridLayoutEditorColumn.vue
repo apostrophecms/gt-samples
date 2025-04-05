@@ -1,6 +1,5 @@
 <template>
-  <div class="column" :style="`left: ${x}px; width: ${width}px`">
-    <span v-if="allowAddBefore" @click="addBefore" class="add-left">+</span>
+  <div class="column">
     <GridLayoutEditorHandle @change="expandLeft" className="grid-layout-editor-expand-left">
       &lt;
     </GridLayoutEditorHandle>
@@ -11,105 +10,36 @@
     <GridLayoutEditorHandle @change="expandRight" className="grid-layout-editor-expand-right">
       &gt;
     </GridLayoutEditorHandle>
-    <span v-if="allowAddAfter" @click="addAfter" class="add-right">+</span>
   </div>
 </template>
 
 <script setup>
 
-import { ref, watch } from 'vue';
+const props = defineProps([ 'allowRemove' ]);
 
-const props = defineProps([ 'colStart', 'colSpan', 'stopsTotal', 'stopSize', 'allowAddBefore', 'allowAddAfter', 'allowRemove', 'generation' ]);
-
-const x = ref(null);
-const width = ref(null);
-
-computeX();
-computeWidth();
-
-watch(() => props.colStart, () => {
-  computeX();
-});
-watch(() => props.colSpan, () => {
-  computeWidth();
-});
-watch(() => props.stopSize, () => {
-  computeX();
-  computeWidth();
-});
-// Used to deny changes
-watch(() => props.generation, () => {
-  computeX();
-  computeWidth();
-});
-
-function computeX() {
-  x.value = props.colStart * props.stopSize;
-}
-
-function computeWidth() {
-  width.value = props.stopSize * props.colSpan;
-}
-
-const emit = defineEmits([ 'remove', 'change', 'addBefore', 'addAfter' ]);
-function addBefore() {
-  emit('addBefore');
-}
-function addAfter() {
-  emit('addAfter');
-}
-function expandLeft({ delta, commit }) {
-  x.value += delta;
-  width.value -= delta;
-  console.log('new values:', x.value, width.value);
-  if (commit) {
-    change();
-  }
-}
-function expandRight({ delta, commit }) {
-  width.value += delta;
-  if (commit) {
-    change();
-  }
-}
-function move({ delta, commit }) {
-  x.value += delta;
-  if (commit) {
-    change();
-  }
-}
+const emit = defineEmits([ 'remove', 'move', 'expandLeft', 'expandRight' ]);
 function remove() {
   emit('remove');
 }
-function change() {
-  const colStart = snap(x.value, 0, props.stopsTotal - 1);
-  const colSpan = snap(width.value, 1, props.stopsTotal);
-  emit('change', {
-    colStart,
-    colSpan
-  });
+function move(event) {
+  emit('move', event);
 }
-function snap(x, min, max) {
-  return Math.max(Math.min(Math.round(x / props.stopSize), max), min);  
+function expandLeft(event) {
+  emit('expandLeft', event);
+}
+function expandRight(event) {
+  emit('expandRight', event);
 }
 </script>
 
 <style scoped>
 .column {
-  position: absolute;
-  height: 1.25em;
+  width: 100%;
+  height: 100%;
   background-color: #def;
-  border-radius: 0.625em;
-}
-.add-left {
-  position: absolute;
-  left: 0.25em;
-  cursor: pointer;
-}
-.add-right {
-  position: absolute;
-  right: 0.25em;
-  cursor: pointer;
+  border: 1px solid #89a;
+  border-bottom: none;
+  border-radius: 0.625em 0.625em 0 0;
 }
 .remove {
   position: absolute;

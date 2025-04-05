@@ -5,20 +5,14 @@
         <div v-for="i in stopsTotal" class="stop"></div>
       </div>
       <div class="columns">
-        <GridLayoutEditorColumn v-for="(column, i) in columns"
-          :allow-add-before="allowAddBefore(i)"
-          :allow-add-after="allowAddAfter(i)"
-          :col-start="column.colStart"
-          :col-span="column.colSpan"
-          :column-id="column._id"
-          :allow-remove="allowRemove()"
-          :key="column._id"
+        <GridLayoutEditorZone v-for="zone in zones"
+          :zone="zone"
           :stop-size="stopSize"
           :stops-total="stopsTotal"
           :generation="generation"
-          @change="columnChange(i, $event.colStart, $event.colSpan)"
-          @add-before="addBefore(i)"
-          @add-after="addAfter(i)"
+          @change="columnChange(zone.i, $event)"
+          @add="add(zone.i)"
+          @remove="remove(zone.i)"
         />
       </div>
     </div>
@@ -29,7 +23,7 @@
 // TODO npm install at project level
 import { createId } from '@paralleldrive/cuid2';
 
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps([ 'modelValue', 'options', 'focused' ]);
 
@@ -59,72 +53,76 @@ onBeforeUnmount(() => {
   }
 });
 
-function allowAddBefore(i) {
-  return columns.value.length < stopsTotal;
-}
-function allowAddAfter(i) {
-  return (columns.value.length < stopsTotal) && ((i + 1) === columns.value.length);
-}
-function allowRemove() {
-  return columns.value.length > 1;
-}
-// i is a column index in the array, not a stop number.
+const zones = computed(() => {
+  const result = [];
+  let lastStop = 0;
+  const c = columns.value;
+  for (let i = 0; (i < c.length); i++) {
+    const column = c[i];
+    if (column.colStart > lastStop) {
+      result.push({
+        type: 'gap',
+        i,
+        colStart: lastStop,
+        colSpan: column.colStart - lastStop
+      });
+    }
+    result.push({
+      type: 'column',
+      // needed for events bubbling back up
+      i,
+      ...column,
+      allowRemove: c.length > 1
+    });
+    lastStop = column.colStart + column.colSpan;
+  }
+  if (lastStop < stopsTotal) {
+    result.push({
+      type: 'gap',
+      // needed for events bubbling back up
+      i: c.length,
+      colStart: lastStop,
+      colSpan: stopsTotal - lastStop
+    });
+  }
+  return result;
+});
+
+// i is a column index in the columns array, not a stop number.
 // If (i === columns.value.length) then the new column is added
 // at the end, otherwise before column i
-function addBefore(i) {
+function add(i) {
+  console.log(`--> ${i} ${columns.value.length}`);
   const old = columns.value;
-  console.log(JSON.stringify(old));
   let next;
-  const freeLeft = old[0].colStart;
-  const endRight = last(old).colStart + last(old).colSpan;
-  const freeRight = stopsTotal - endRight;
-  const borrowFromLeft = findLastIndex(old, col => col.colSpan > 1, i - 1);
-  const borrowFromRight = findIndex(old, col => col.colSpan > 1, i);
-
-  console.log({
-    i,
-    freeLeft,
-    freeRight,
-    borrowFromLeft,
-    borrowFromRight
-  });
-
-  if ((i === 0) && (freeLeft > 0)) {
-    // Take the empty space at far left
-    next = [ newColumn(0, freeLeft), ...old ];
-  } else if ((i === old.length) && (freeRight > 0)) {
-    // Take the empty space at far right
-    next = [ ...old, newColumn(endRight, freeRight) ];
-  } else if (borrowFromLeft !== -1) {
-    // TODO borrowing just one stop is a bit miserly in some scenarios
-    const from = old[borrowFromLeft];
-    // TODO a map that replaces one, then insert the new one
-    next = [ ...old.map(col => (col._id === from._id) ? {
-      ...from,
-      colSpan: from.colSpan - 1
-    } : col) ];
-    // Don't forget to subtract the stop we borrowed from left
-    next.splice(i, 0, newColumn(old[i].colStart + old[i].colSpan - 1, 1));
-  } else if (borrowFromRight !== -1) {
-    // TODO borrowing just one stop is a bit miserly in some scenarios
-    const from = old[borrowFromRight];
-    // TODO a map that replaces one, then insert the new one
-    next = [ ...old.map(col => (col._id === from._id) ? {
-      ...from,
-      colStart: from.colStart + 1,
-      colSpan: from.colSpan - 1
-    } : col) ];
-    // We borrowed from the right so we don't need to subtract one
-    next.splice(i, 0, newColumn(old[i].colStart, 1));
+  if (i === 0) {
+    if (old[i].colStart === 0) {
+      throw new Error('add(0) should not be possible if there is no gap to the left of the first column');
+    }
+    next = [ newColumn(0, old[i].colStart), ...old ];
+  } else if (i > columns.value.length) {
+    throw new Error('add(i) with i > columns.value.length should not be possible');
+  } else if (i === columns.value.length) {
+    const endPrevious = old[i - 1].colStart + old[i - 1].colSpan;
+    const available = stopsTotal - endPrevious;
+    if (!available) {
+      throw new Error('add(columns.value.length) should not be possible when there is no gap at the end');
+    }
+    next = [ ...old, newColumn(endPrevious, available) ];
   } else {
-    throw new Error('addBefore should not be reachable if no stops are free or borrowable');
+    console.log(`i is: ${i}`);
+    const endPrevious = old[i - 1].colStart + old[i - 1].colSpan;
+    const available = old[i].colStart - endPrevious;
+    console.log(old[i - 1], old[i], endPrevious, available);
+    if (!available) {
+      throw new Error('add(i) should not be possible when column i is not preceded by a gap');
+    }
+    next = [ ...old.slice(0, i), newColumn(endPrevious, available), ...old.slice(i) ];
   }
   columns.value = next;
   console.log('new columns:', JSON.stringify(next));
 }
-function addAfter(i) {
-  return addBefore(i + 1);
-}
+
 function newColumn(col, span) {
   return {
     _id: createId(),
@@ -133,15 +131,20 @@ function newColumn(col, span) {
   };
 }
 
-function last(a) {
-  return a[a.length - 1];
+function remove(i) {
+  columns.value = columns.value.filter((column, index) => index !== i);
 }
 
 // If a request would cause columns to overlap, just deny it. The user
 // can manually resize other columns to make room. TODO: would be nice
 // to do some automatic reshuffling, or maybe it wouldn't
 
-function columnChange(i, colStart, colSpan) {
+function columnChange(i, { colStart, colSpan }) {
+  if (colStart < 0 || ((colStart + colSpan) > stopsTotal)) {
+    // Force redraw without changes to the props
+    generation.value++;
+    return;
+  }
   if (columns.value.some((column, index) => {
     if (index === i) {
       return false;
@@ -150,10 +153,13 @@ function columnChange(i, colStart, colSpan) {
     const a2 = colStart + colSpan;
     const b1 = column.colStart;
     const b2 = column.colStart + column.colSpan;
-    return intersects(a1, a2, b1, b2);
+    if (intersects(a1, a2, b1, b2)) {
+      console.log(`${i} ${index} ${a1} ${a2} ${b1} ${b2}`);
+      console.log(`c ${columns.value[i]._id} ${columns.value[index]._id}`);
+      return true;
+    }
   })) {
-    // So that x and width reset in the column
-    console.log('Bumping generation due to intersection');
+    // Force redraw without changes to the props
     generation.value++;
     return;
   }
@@ -166,8 +172,7 @@ function columnChange(i, colStart, colSpan) {
     return a.colStart - b.colStart;
   });
   columns.value = updated;
-  // In case the other parameters didn't change: we still want
-  // to reset any partial moves
+  // Force redraw in case there were no other changes to the props
   generation.value++;
 }
 
@@ -188,21 +193,13 @@ function intersects(a1, a2, b1, b2) {
   }
   return false;
 }
-
-// Because fromIndex is missing from the standard methods for no reason
-function findIndex(a, fn, fromIndex) {
-  return a.findIndex((v, i) => (i >= fromIndex) && fn(v));
-}
-
-function findLastIndex(a, fn, fromIndex) {
-  return a.findLastIndex((v, i) => (i <= fromIndex) && fn(v));
-}
 </script>
 
 <style lang="scss" scoped>
   .contextual-heading-controls {
     display: none;
     width: 100%;
+    padding-top: 1em;
   }
   .focused {
     min-height: 50vh;
