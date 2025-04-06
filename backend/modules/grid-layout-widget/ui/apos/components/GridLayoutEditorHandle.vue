@@ -90,6 +90,6 @@
   }
   .grid-layout-editor-move {
     position: absolute;
-    left: calc(50% - 6px);
+    left: calc(50% - 8px);
   }
 </style>
