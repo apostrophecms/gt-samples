@@ -21,7 +21,9 @@ module.exports = {
     stops: 12
   },
   icons: {
-    'view-grid': 'ViewGrid'
+    'drag': 'Drag',
+    'plus-circle-outline': 'PlusCircleOutline',
+    'trash-can-outline': 'TrashCanOutline'
   },
   // We need to pass fields as a function to allow for the preview HTML
   fields(self, options) {

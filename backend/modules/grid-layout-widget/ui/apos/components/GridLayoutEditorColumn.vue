@@ -1,15 +1,9 @@
 <template>
   <div class="column">
-    <GridLayoutEditorHandle @change="expandLeft" className="grid-layout-editor-expand-left">
-      &lt;
-    </GridLayoutEditorHandle>
-    <GridLayoutEditorHandle @change="move" className="grid-layout-editor-move">
-      #
-    </GridLayoutEditorHandle>
-    <span v-if="allowRemove" @click.prevent="remove()" class="remove">x</span>
-    <GridLayoutEditorHandle @change="expandRight" className="grid-layout-editor-expand-right">
-      &gt;
-    </GridLayoutEditorHandle>
+    <GridLayoutEditorHandle @change="expandLeft" className="grid-layout-editor-expand-left" />
+    <GridLayoutEditorHandle @change="move" className="grid-layout-editor-move" />
+    <span v-if="allowRemove" @click.prevent="remove()" class="remove"><trash-can-outline /></span>
+    <GridLayoutEditorHandle @change="expandRight" className="grid-layout-editor-expand-right" />
   </div>
 </template>
 
@@ -40,10 +34,25 @@ function expandRight(event) {
   border: 1px solid #89a;
   border-bottom: none;
   border-radius: 0.625em 0.625em 0 0;
+  padding-bottom: 2px;
 }
 .remove {
   position: absolute;
-  right: calc(50% - 1em);
+  left: calc(75% - 7px);
   cursor: pointer;
+}
+.material-design-icon {
+  display: inline-flex;
+  align-self: center;
+  position: relative;
+  height: 1em;
+  width: 1em;
+}
+.material-design-icon > .material-design-icon__svg {
+  height: 1em;
+  width: 1em;
+  fill: currentColor;
+  position: absolute;
+  bottom: -0.125em;
 }
 </style>

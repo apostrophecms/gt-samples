@@ -37,12 +37,9 @@ let resizeObserver;
 
 onMounted(() => {
   stopSize.value = el.value.getBoundingClientRect().width / stopsTotal;
-  console.log(`--> ${stopSize.value}`);
   resizeObserver = new ResizeObserver(entries => {
-    console.log(':::', entries);
     const entry = entries[0];
     stopSize.value = entry.contentRect.width / stopsTotal;
-    console.log(`==> ${stopSize.value}`);
   });
   resizeObserver.observe(el.value);
 });
@@ -92,7 +89,6 @@ const zones = computed(() => {
 // If (i === columns.value.length) then the new column is added
 // at the end, otherwise before column i
 function add(i) {
-  console.log(`--> ${i} ${columns.value.length}`);
   const old = columns.value;
   let next;
   if (i === 0) {
@@ -110,17 +106,14 @@ function add(i) {
     }
     next = [ ...old, newColumn(endPrevious, available) ];
   } else {
-    console.log(`i is: ${i}`);
     const endPrevious = old[i - 1].colStart + old[i - 1].colSpan;
     const available = old[i].colStart - endPrevious;
-    console.log(old[i - 1], old[i], endPrevious, available);
     if (!available) {
       throw new Error('add(i) should not be possible when column i is not preceded by a gap');
     }
     next = [ ...old.slice(0, i), newColumn(endPrevious, available), ...old.slice(i) ];
   }
   columns.value = next;
-  console.log('new columns:', JSON.stringify(next));
 }
 
 function newColumn(col, span) {
@@ -154,8 +147,6 @@ function columnChange(i, { colStart, colSpan }) {
     const b1 = column.colStart;
     const b2 = column.colStart + column.colSpan;
     if (intersects(a1, a2, b1, b2)) {
-      console.log(`${i} ${index} ${a1} ${a2} ${b1} ${b2}`);
-      console.log(`c ${columns.value[i]._id} ${columns.value[index]._id}`);
       return true;
     }
   })) {
@@ -178,7 +169,6 @@ function columnChange(i, { colStart, colSpan }) {
 
 function intersects(a1, a2, b1, b2) {
   // This is lazy, but effective
-  console.log(a1, a2, b1, b2);
   const places = [];
   for (let i = 0; (i < stopsTotal); i++) {
     places[i] = false;

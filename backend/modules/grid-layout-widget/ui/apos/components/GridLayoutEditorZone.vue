@@ -60,7 +60,6 @@ function add() {
 function expandLeft({ delta, commit }) {
   x.value += delta;
   width.value -= delta;
-  console.log('new values:', x.value, width.value);
   if (commit) {
     change();
   }

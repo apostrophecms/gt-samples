@@ -6,7 +6,7 @@
     @pointerdown.prevent="down($event)"
     @pointermove.prevent="move($event)"
     @pointerup.prevent="up($event)">
-    <slot />
+    <drag />
   </span>
 </template>
 
@@ -34,7 +34,6 @@
     if (!dragging) {
       return;
     }
-    console.log('emitting change');
     const delta = event.pageX - dx;
     dx = event.pageX;
     emit('change', {
@@ -50,7 +49,6 @@
     dragging = false;
     const delta = event.pageX - dx;
     dx = event.pageX;
-    console.log('committing');
     emit('change', {
       delta,
       commit: true
@@ -63,6 +61,21 @@
   .handle {
     position: absolute;
     cursor: grab;
+    width: 16px;
+  }
+  .material-design-icon {
+    display: inline-flex;
+    align-self: center;
+    position: relative;
+    height: 1em;
+    width: 1em;
+  }
+  .material-design-icon > .material-design-icon__svg {
+    height: 1em;
+    width: 1em;
+    fill: currentColor;
+    position: absolute;
+    bottom: -0.125em;
   }
 </style>
 
@@ -77,6 +90,6 @@
   }
   .grid-layout-editor-move {
     position: absolute;
-    left: calc(50% - 0.5em);
+    left: calc(50% - 6px);
   }
 </style>

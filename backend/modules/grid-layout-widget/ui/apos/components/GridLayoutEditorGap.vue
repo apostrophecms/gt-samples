@@ -1,6 +1,8 @@
 <template>
   <div class="gap">
-    <span @click="add" class="add">+</span>
+    <span @click="add" class="add">
+      <plus-circle-outline />
+    </span>
   </div>
 </template>
 
@@ -18,5 +20,19 @@ function add() {
 }
 .add-left {
   cursor: pointer;
+}
+.material-design-icon {
+  display: inline-flex;
+  align-self: center;
+  position: relative;
+  height: 1em;
+  width: 1em;
+}
+.material-design-icon > .material-design-icon__svg {
+  height: 1em;
+  width: 1em;
+  fill: currentColor;
+  position: absolute;
+  bottom: -0.125em;
 }
 </style>
