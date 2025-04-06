@@ -1,47 +1,13 @@
-.grid-layout-widget {
+.grid-layout-columns {
   display: grid;
-  grid-template-columns: repeat(var(--columns), 1fr);
-  grid-template-rows: repeat(var(--rows), auto);
-  gap: var(--gap);
-  padding: var(--padding);
-  margin: var(--margin);
-  height: auto;
+  width: 100%;
+  grid-template-columns: repeat(var(--stops), 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: 16px;
 }
 
-.grid-layout-area {
-  grid-column: var(--col-start) / span var(--col-span);
-  grid-row: var(--row-start) / span var(--row-span);
-  min-height: var(--min-height, auto);
-  align-self: var(--align-self, stretch);
-  justify-self: var(--justify-self, stretch);
+.grid-layout-column {
+  grid-column: var(--start) / var(--end);
 }
 
-// TODO how do I bring this back in an automatic way?
-//
-// // Tablet-ish
-
-// @media (max-width: 1023px) {
-//   .custom-layout-widget {
-//     grid-template-columns: repeat(12, 1fr);
-//     gap: calc(var(--gap) * 0.75);
-//   }
-
-//   .custom-layout-area {
-//     grid-column: auto / span var(--tablet-col-span);
-//     grid-row: auto;
-//   }
-// }
-
-// // Smartphone-ish
-
-// @media (max-width: 480px) {
-//   .custom-layout-widget {
-//     grid-template-columns: repeat(12, 1fr);
-//     gap: calc(var(--gap) * 0.5);
-//   }
-
-//   .custom-layout-area {
-//     grid-column: auto / span var(--mobile-col-span);
-//     grid-row: auto;
-//   }
-// }
+// TODO responsive demo

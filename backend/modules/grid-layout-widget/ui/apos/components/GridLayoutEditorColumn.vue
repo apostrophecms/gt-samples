@@ -16,12 +16,15 @@ function remove() {
   emit('remove');
 }
 function move(event) {
+  console.log('move');
   emit('move', event);
 }
 function expandLeft(event) {
+  console.log('el');
   emit('expandLeft', event);
 }
 function expandRight(event) {
+  console.log('er');
   emit('expandRight', event);
 }
 </script>

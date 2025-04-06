@@ -77,12 +77,19 @@ function move({ delta, commit }) {
   }
 }
 function change() {
+  console.log('in change');
   const colStart = snap(x.value, 0, props.stopsTotal - 1);
   const colSpan = snap(width.value, 1, props.stopsTotal);
-  emit('change', {
-    colStart,
-    colSpan
-  });
+  if ((props.zone.colSpan !== colSpan) || (props.zone.colStart !== colStart)) {
+    emit('change', {
+      colStart,
+      colSpan
+    });
+  } else {
+    // No meaningful change
+    computeX();
+    computeWidth();
+  }
 }
 function snap(x, min, max) {
   return Math.max(Math.min(Math.round(x / props.stopSize), max), min);  

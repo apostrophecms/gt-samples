@@ -46,14 +46,14 @@ module.exports = {
               },
               colStart: {
                 type: 'integer',
-                min: 1,
-                max: 12,
+                min: 0,
+                max: 100,
                 required: true
               },
               colSpan: {
                 type: 'integer',
                 min: 1,
-                max: 12,
+                max: 100,
                 required: true
               }
             }
@@ -62,15 +62,25 @@ module.exports = {
       }
     };
   },
+  // TODO extend sanitize to reject colStart and colSpan if they exceed the actual caps at
+  // area options level, or at module level
   extendMethods(self) {
     return {
       getBrowserData(_super, req) {
         const data = _super(req);
+        const columnsField = findField(self.schema, 'columns');
+        console.log(self.schema);
+        const areaField = findField(columnsField.schema, 'content');
         return {
           ...data,
-          stops: self.options.stops
+          stops: self.options.stops,
+          areaField
         };
       }
     }
   }
 };
+
+function findField(schema, name) {
+  return schema.find(field => field.name === name);
+}

@@ -2,23 +2,17 @@
 
 <div class="container is-fluid mb-6">
   <div
-    class="grid-layout-widget"
+    class="grid-layout-columns"
     style="
-      --columns: 12;
-      --rows: 1;
-      --gap: 1rem;
-      --padding: 1rem;
-      --margin: auto;    
+      --stops: 12
     "
   >
     {% for column in widget.columns %}
       <div
-        class="grid-layout-area"
-        style="        
-          --col-start: {{ column.colStart }};
-          --col-span: {{ column.colSpan }};
-          --row-start: 1;
-          --row-span: 1;
+        class="grid-layout-column"
+        style="
+          --start: {{ column.colStart + 1 }};
+          --end: {{ column.colStart + column.colSpan + 1 }};
         "
       >
         {% area column, 'content' %}

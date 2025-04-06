@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue';
+  import { ref } from 'vue';
   const emit = defineEmits([ 'change' ]);
   defineProps([ 'className' ]);
 

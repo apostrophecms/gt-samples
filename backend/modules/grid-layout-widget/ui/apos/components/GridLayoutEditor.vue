@@ -6,13 +6,34 @@
       </div>
       <div class="columns">
         <GridLayoutEditorZone v-for="zone in zones"
-          :zone="zone"
+          :zone="log('zone:', zone)"
           :stop-size="stopSize"
           :stops-total="stopsTotal"
           :generation="generation"
           @change="columnChange(zone.i, $event)"
           @add="add(zone.i)"
           @remove="remove(zone.i)"
+          :key="zone._id"
+        />
+      </div>
+    </div>
+    <div class="grid-layout-columns">
+      <div
+        class="grid-layout-column"
+        v-for="(column, i) in props.modelValue.columns"
+        :key="column._id"
+        :style="`--start: ${column.colStart + 1}; --end: ${column.colStart + column.colSpan + 1}`"
+      >
+        <!-- TODO ask Miro if I'm handling meta right -->
+        <AposAreaEditor
+          :id="column.content._id"
+          :items="column.content.items"
+          :meta="meta"
+          :choices="choices"
+          :options="areaField.options"
+          :field-id="areaField._id"
+          :field="areaField"
+          @changed="edited(i, $event)"
         />
       </div>
     </div>
@@ -23,37 +44,74 @@
 // TODO npm install at project level
 import { createId } from '@paralleldrive/cuid2';
 
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { onRenderTriggered, watch, ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
-const props = defineProps([ 'modelValue', 'options', 'focused' ]);
-
+const props = defineProps([ 'modelValue', 'meta', 'options', 'focused' ]);
+const emit = defineEmits([ 'update' ]);
 const el = ref(null);
 const generation = ref(0);
 const stopSize = ref(null);
 const stopsTotal = props.options.stops || apos.modules['grid-layout-widget'].stops;
-const columns = ref([ newColumn(0, stopsTotal) ]);
+const areaField = apos.modules['grid-layout-widget'].areaField;
+const choices = getChoices();
+
+onRenderTriggered(e => {
+  if (Math.random() < 0.01) {
+    debugger;
+  }
+});
+
+watch(() => props.modelValue, 'modelValue changed');
+
+if (!props.modelValue.columns) {
+  update([ newColumn(0, stopsTotal) ]);
+}
 
 let resizeObserver;
 
 onMounted(() => {
   stopSize.value = el.value.getBoundingClientRect().width / stopsTotal;
-  resizeObserver = new ResizeObserver(entries => {
-    const entry = entries[0];
-    stopSize.value = entry.contentRect.width / stopsTotal;
-  });
-  resizeObserver.observe(el.value);
+  // resizeObserver = new ResizeObserver(entries => {
+  //   const entry = entries[0];
+  //   stopSize.value = entry.contentRect.width / stopsTotal;
+  // });
+  // resizeObserver.observe(el.value);
 });
 
 onBeforeUnmount(() => {
-  if (resizeObserver) {
-    resizeObserver.disconnect();
-  }
+  // if (resizeObserver) {
+  //   resizeObserver.disconnect();
+  // }
 });
 
+function edited(i, $event) {
+  update(props.modelValue.columns.map((column, index) => {
+    if (i === index) {
+      return {
+        ...props.modelValue.columns[i],
+        content: {
+          ...props.modelValue.columns[i].content,
+          items: $event.items
+        }
+      };
+    } else {
+      return column;
+    }
+  }));
+}
+
+function update(columns) {
+  emit('update', {
+    ...props.modelValue,
+    columns
+  });
+}
+
 const zones = computed(() => {
+  console.log('computing zones');
   const result = [];
   let lastStop = 0;
-  const c = columns.value;
+  const c = props.modelValue.columns || [];
   for (let i = 0; (i < c.length); i++) {
     const column = c[i];
     if (column.colStart > lastStop) {
@@ -61,7 +119,8 @@ const zones = computed(() => {
         type: 'gap',
         i,
         colStart: lastStop,
-        colSpan: column.colStart - lastStop
+        colSpan: column.colStart - lastStop,
+        _id: `before-${column._id}`
       });
     }
     result.push({
@@ -79,30 +138,31 @@ const zones = computed(() => {
       // needed for events bubbling back up
       i: c.length,
       colStart: lastStop,
-      colSpan: stopsTotal - lastStop
+      colSpan: stopsTotal - lastStop,
+      _id: 'last'
     });
   }
   return result;
 });
 
 // i is a column index in the columns array, not a stop number.
-// If (i === columns.value.length) then the new column is added
+// If (i === props.modelValue.columns.length) then the new column is added
 // at the end, otherwise before column i
 function add(i) {
-  const old = columns.value;
+  const old = props.modelValue.columns;
   let next;
   if (i === 0) {
     if (old[i].colStart === 0) {
       throw new Error('add(0) should not be possible if there is no gap to the left of the first column');
     }
     next = [ newColumn(0, old[i].colStart), ...old ];
-  } else if (i > columns.value.length) {
-    throw new Error('add(i) with i > columns.value.length should not be possible');
-  } else if (i === columns.value.length) {
+  } else if (i > props.modelValue.columns.length) {
+    throw new Error('add(i) with i > props.modelValue.columns.length should not be possible');
+  } else if (i === props.modelValue.columns.length) {
     const endPrevious = old[i - 1].colStart + old[i - 1].colSpan;
     const available = stopsTotal - endPrevious;
     if (!available) {
-      throw new Error('add(columns.value.length) should not be possible when there is no gap at the end');
+      throw new Error('add(props.modelValue.columns.length) should not be possible when there is no gap at the end');
     }
     next = [ ...old, newColumn(endPrevious, available) ];
   } else {
@@ -113,19 +173,25 @@ function add(i) {
     }
     next = [ ...old.slice(0, i), newColumn(endPrevious, available), ...old.slice(i) ];
   }
-  columns.value = next;
+  update(next);
 }
 
 function newColumn(col, span) {
   return {
+    metaType: 'arrayItem',
     _id: createId(),
     colStart: col,
-    colSpan: span
+    colSpan: span,
+    content: {
+      metaType: 'area',
+      _id: createId(),
+      items: []
+    }
   };
 }
 
 function remove(i) {
-  columns.value = columns.value.filter((column, index) => index !== i);
+  update(props.modelValue.columns.filter((column, index) => index !== i));
 }
 
 // If a request would cause columns to overlap, just deny it. The user
@@ -138,7 +204,7 @@ function columnChange(i, { colStart, colSpan }) {
     generation.value++;
     return;
   }
-  if (columns.value.some((column, index) => {
+  if (props.modelValue.columns.some((column, index) => {
     if (index === i) {
       return false;
     }
@@ -154,17 +220,15 @@ function columnChange(i, { colStart, colSpan }) {
     generation.value++;
     return;
   }
-  const updated = [...columns.value.filter((column, index) => index !== i), {
-    ...columns[i],
+  const updated = [...props.modelValue.columns.filter((column, index) => index !== i), {
+    ...props.modelValue.columns[i],
     colStart,
     colSpan
   }];
   updated.sort((a, b) => {
     return a.colStart - b.colStart;
   });
-  columns.value = updated;
-  // Force redraw in case there were no other changes to the props
-  generation.value++;
+  update(updated);
 }
 
 function intersects(a1, a2, b1, b2) {
@@ -183,6 +247,35 @@ function intersects(a1, a2, b1, b2) {
   }
   return false;
 }
+
+// TODO should be shard with core
+function getChoices() {
+  const result = [];
+
+  let widgets = areaField.options.widgets || {};
+  if (areaField.options.groups) {
+    for (const group of Object.entries(areaField.options.groups)) {
+      widgets = {
+        ...widgets,
+        ...group.widgets
+      };
+    }
+  }
+
+  for (const [ name, options ] of Object.entries(widgets)) {
+    result.push({
+      name,
+      label: options.addLabel || apos.modules[`${name}-widget`]?.label,
+      icon: apos.modules[`${name}-widget`]?.icon
+    });
+  }
+  return result;
+}
+
+function log(msg, a) {
+  console.log(msg, JSON.stringify(a, null, '  '));
+  return a;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -190,9 +283,6 @@ function intersects(a1, a2, b1, b2) {
     display: none;
     width: 100%;
     padding-top: 1em;
-  }
-  .focused {
-    min-height: 50vh;
   }
   .focused .contextual-heading-controls {
     display: block;
