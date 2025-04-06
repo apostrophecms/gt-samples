@@ -71,6 +71,10 @@ let resizeObserver;
 
 onMounted(() => {
   stopSize.value = el.value.getBoundingClientRect().width / stopsTotal;
+  // Bring me back when we figure out how to keep this from causing an infinite loop as the
+  // scrollbar appears and disappears. Probably need to watch the size of something else or
+  // debounce in some way
+  //
   // resizeObserver = new ResizeObserver(entries => {
   //   const entry = entries[0];
   //   stopSize.value = entry.contentRect.width / stopsTotal;
@@ -280,12 +284,8 @@ function log(msg, a) {
 
 <style lang="scss" scoped>
   .contextual-heading-controls {
-    display: none;
     width: 100%;
     padding-top: 1em;
-  }
-  .focused .contextual-heading-controls {
-    display: block;
   }
   .stops {
     display: grid;
@@ -302,8 +302,13 @@ function log(msg, a) {
     display: block;
     position: relative;
     width: 100%;
+    height: 20px;
   }
   .column {
     position: absolute;
+  }
+  .grid-layout-columns {
+    margin-top: 32px;
+    min-height: 50vh;
   }
 </style>
