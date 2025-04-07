@@ -39,5 +39,6 @@ module.exports = {
   '@apostrophecms/image': {},
   '@apostrophecms/video': {},
   'snippet': {},
-  '@apostrophecms/form': {}
+  '@apostrophecms/form': {},
+  'company': {}
 };

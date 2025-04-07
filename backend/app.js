@@ -47,6 +47,7 @@ require('apostrophe')({
     '@apostrophecms/form-conditional-widget': {},
     '@apostrophecms/form-divider-widget': {},
     '@apostrophecms/form-group-widget': {},
-    'grid-layout-widget': {}
+    'grid-layout-widget': {},
+    'company-widget': {}
   }
 });

@@ -1,0 +1,23 @@
+{#
+  Just an example of a more complex widget with array fields, to show how the
+  live preview feature behaves in this context
+#}
+
+<h3>Company: {{ data.widget.name }}</h3>
+
+<h4>Locations</h4>
+
+{% for location in data.widget.locations %}
+  <p>
+    {{ location.street }}</br />
+    {{ location.city }}, {{ location.state }} {{ location.zip }}
+  </p>
+{% endfor %}
+
+<h4>Products</h4>
+
+{% for product in data.widget.products %}
+  <h4>{{ product.name }}</h4>
+  <p>Price: ${{ product.price }}</p>
+  {% area product, 'body' %}
+{% endfor %}
