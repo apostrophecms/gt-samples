@@ -1,12 +1,13 @@
 <template>
   <div class="gap">
-    <span @click="add" class="add">
+    <span v-if="allowAdd" @click="add" class="add">
       <plus-circle-outline />
     </span>
   </div>
 </template>
 
 <script setup>
+const props = defineProps([ 'allowAdd' ]);
 const emit = defineEmits([ 'add' ]);
 function add() {
   emit('add');

@@ -18,7 +18,9 @@ module.exports = {
       widgetEditor: 'GridLayoutEditor'
     },
     // Default # of stops
-    stops: 12
+    stops: 12,
+    // Default min # of stops per column
+    minStops: 2
   },
   icons: {
     'drag': 'Drag',
@@ -69,11 +71,11 @@ module.exports = {
       getBrowserData(_super, req) {
         const data = _super(req);
         const columnsField = findField(self.schema, 'columns');
-        console.log(self.schema);
         const areaField = findField(columnsField.schema, 'content');
         return {
           ...data,
           stops: self.options.stops,
+          minStops: self.options.minStops,
           areaField
         };
       }

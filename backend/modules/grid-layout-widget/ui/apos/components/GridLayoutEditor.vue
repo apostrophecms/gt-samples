@@ -6,7 +6,7 @@
       </div>
       <div class="columns">
         <GridLayoutEditorZone v-for="zone in zones"
-          :zone="log('zone:', zone)"
+          :zone="zone"
           :stop-size="stopSize"
           :stops-total="stopsTotal"
           :generation="generation"
@@ -52,6 +52,7 @@ const el = ref(null);
 const generation = ref(0);
 const stopSize = ref(null);
 const stopsTotal = props.options.stops || apos.modules['grid-layout-widget'].stops;
+const minStops = props.options.minStops || apos.modules['grid-layout-widget'].minStops;
 const areaField = apos.modules['grid-layout-widget'].areaField;
 const choices = getChoices();
 
@@ -112,19 +113,20 @@ function update(columns) {
 }
 
 const zones = computed(() => {
-  console.log('computing zones');
   const result = [];
   let lastStop = 0;
   const c = props.modelValue.columns || [];
   for (let i = 0; (i < c.length); i++) {
     const column = c[i];
+    const colSpan = column.colStart - lastStop;
     if (column.colStart > lastStop) {
       result.push({
         type: 'gap',
         i,
         colStart: lastStop,
-        colSpan: column.colStart - lastStop,
-        _id: `before-${column._id}`
+        colSpan,
+        _id: `before-${column._id}`,
+        allowAdd: colSpan >= minStops
       });
     }
     result.push({
@@ -137,13 +139,15 @@ const zones = computed(() => {
     lastStop = column.colStart + column.colSpan;
   }
   if (lastStop < stopsTotal) {
+    const colSpan = stopsTotal - lastStop;
     result.push({
       type: 'gap',
       // needed for events bubbling back up
       i: c.length,
       colStart: lastStop,
-      colSpan: stopsTotal - lastStop,
-      _id: 'last'
+      colSpan,
+      _id: 'last',
+      allowAdd: colSpan >= minStops
     });
   }
   return result;
@@ -207,6 +211,10 @@ function columnChange(i, { colStart, colSpan }) {
     // Force redraw without changes to the props
     generation.value++;
     return;
+  }
+  if (colSpan < minStops) {
+    generation.value++;
+    return;    
   }
   if (props.modelValue.columns.some((column, index) => {
     if (index === i) {

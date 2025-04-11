@@ -11,6 +11,7 @@
     <GridLayoutEditorGap
       v-else
       @add="add"
+      :allow-add="zone.allowAdd"
     />
   </div>
 </template>
@@ -21,6 +22,7 @@ import { ref, watch } from 'vue';
 
 const props = defineProps([ 'zone', 'stopsTotal', 'stopSize', 'generation' ]);
 
+console.log(`zone has allowAdd: ${props.zone.allowAdd}`);
 const emit = defineEmits([ 'remove', 'change', 'add' ]);
 
 const x = ref(null);
