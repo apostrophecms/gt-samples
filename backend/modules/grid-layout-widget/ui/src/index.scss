@@ -1,7 +1,7 @@
 .grid-layout-columns {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(var(--stops), 1fr);
+  grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(1, 1fr);
   gap: 16px;
 }
@@ -10,4 +10,8 @@
   grid-column: var(--start) / var(--end);
 }
 
-// TODO responsive demo
+@media (max-width: 1023px) {
+  .grid-layout-column {
+    grid-column: 1 / 12;
+  }
+}

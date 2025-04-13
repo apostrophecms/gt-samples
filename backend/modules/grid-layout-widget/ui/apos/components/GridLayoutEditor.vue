@@ -17,7 +17,7 @@
         />
       </div>
     </div>
-    <div class="grid-layout-columns">
+    <div :class="classes">
       <div
         class="grid-layout-column"
         v-for="(column, i) in props.modelValue.columns"
@@ -44,7 +44,7 @@
 // TODO npm install at project level
 import { createId } from '@paralleldrive/cuid2';
 
-import { onRenderTriggered, watch, ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { watch, ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps([ 'modelValue', 'meta', 'options', 'focused' ]);
 const emit = defineEmits([ 'update' ]);
@@ -55,12 +55,6 @@ const stopsTotal = props.options.stops || apos.modules['grid-layout-widget'].sto
 const minStops = props.options.minStops || apos.modules['grid-layout-widget'].minStops;
 const areaField = apos.modules['grid-layout-widget'].areaField;
 const choices = getChoices();
-
-onRenderTriggered(e => {
-  if (Math.random() < 0.01) {
-    debugger;
-  }
-});
 
 watch(() => props.modelValue, 'modelValue changed');
 
@@ -147,6 +141,15 @@ const zones = computed(() => {
     });
   }
   return result;
+});
+
+const classes = computed(() => {
+  return {
+    'grid-layout-columns': true,
+    ...(props.options.class ? {
+      [props.options.class]: true
+    } : {})
+  };
 });
 
 // i is a column index in the columns array, not a stop number.
